@@ -1,0 +1,128 @@
+# Brands, their official domains (allowlist + lookalike targets) and known DLT SMS headers.
+# Shared by backend and Android (exported to assets/brands.json).
+#
+# !!! Every header below is UNVERIFIED (verified: false). Before the demo, check each one on
+# !!! https://smsheader.trai.gov.in and flip `verified: true`. Unverified headers are still used
+# !!! for impersonation checks, but never to LOWER a risk score.
+#
+# tokens: lowercase words that, when found as a part of a non-official domain, signal imitation.
+#         Keep tokens >= 3 chars and specific; generic words cause false positives.
+
+version: 2
+
+# Registered domains under these suffixes are restricted to verified entities
+# (RBI's .bank.in for banks, .gov.in / .nic.in for government).
+trusted_suffixes: [bank.in, gov.in, nic.in]
+
+brands:
+  SBI:
+    name: State Bank of India
+    category: bank
+    tokens: [sbi, onlinesbi, yono]
+    domains: [sbi.co.in, onlinesbi.sbi, sbi, sbicard.com, sbiyono.sbi]
+    headers: [{id: SBIINB, verified: false}, {id: SBIBNK, verified: false}, {id: SBYONO, verified: false}]
+  HDFC:
+    name: HDFC Bank
+    category: bank
+    tokens: [hdfc, hdfcbank]
+    domains: [hdfcbank.com, hdfc.com, hdfcbank.net]
+    headers: [{id: HDFCBK, verified: false}]
+  ICICI:
+    name: ICICI Bank
+    category: bank
+    tokens: [icici, icicibank]
+    domains: [icicibank.com, icici.com, icicidirect.com]
+    headers: [{id: ICICIB, verified: false}, {id: ICICIT, verified: false}]
+  AXIS:
+    name: Axis Bank
+    category: bank
+    tokens: [axisbank]
+    domains: [axisbank.com, axisbank.co.in]
+    headers: [{id: AXISBK, verified: false}]
+  KOTAK:
+    name: Kotak Mahindra Bank
+    category: bank
+    tokens: [kotak, kotakbank]
+    domains: [kotak.com, kotakbank.com]
+    headers: [{id: KOTAKB, verified: false}]
+  PNB:
+    name: Punjab National Bank
+    category: bank
+    tokens: [pnbindia, pnbbank]
+    domains: [pnbindia.in, netpnb.com]
+    headers: [{id: PNBSMS, verified: false}]
+  PAYTM:
+    name: Paytm
+    category: payments
+    tokens: [paytm]
+    domains: [paytm.com, paytmbank.com, paytm.me]
+    headers: [{id: PAYTMB, verified: false}, {id: iPaytm, verified: false}]
+  PHONEPE:
+    name: PhonePe
+    category: payments
+    tokens: [phonepe]
+    domains: [phonepe.com]
+    headers: []
+  GPAY:
+    name: Google Pay
+    category: payments
+    tokens: [googlepay, gpay]
+    domains: [google.com, pay.google.com, g.co]
+    headers: []
+  NPCI:
+    name: NPCI / BHIM UPI
+    category: payments
+    tokens: [npci, bhimupi]
+    domains: [npci.org.in, bhimupi.org.in]
+    headers: []
+  INDIAPOST:
+    name: India Post
+    category: courier
+    tokens: [indiapost, speedpost]
+    domains: [indiapost.gov.in, ippbonline.com]
+    headers: []
+  INCOMETAX:
+    name: Income Tax Department
+    category: government
+    tokens: [incometax, itrefund, efiling]
+    domains: [incometax.gov.in, incometaxindia.gov.in]
+    headers: []
+  UIDAI:
+    name: UIDAI (Aadhaar)
+    category: government
+    tokens: [uidai, aadhaar, aadhar]
+    domains: [uidai.gov.in, myaadhaar.uidai.gov.in]
+    headers: [{id: UIDAI, verified: false}]
+  EPFO:
+    name: EPFO
+    category: government
+    tokens: [epfo, epfindia]
+    domains: [epfindia.gov.in]
+    headers: []
+  IRCTC:
+    name: IRCTC
+    category: travel
+    tokens: [irctc]
+    domains: [irctc.co.in]
+    headers: []
+  AIRTEL:
+    name: Airtel
+    category: telecom
+    tokens: [airtel]
+    domains: [airtel.in, airtel.com]
+    headers: []
+  JIO:
+    name: Jio
+    category: telecom
+    tokens: [jiocare, myjio]
+    domains: [jio.com]
+    headers: []
+
+  # Fictional brand for the hackathon demo. Host the fake phishing page on YOUR domain,
+  # e.g. https://bharat-demobank-kyc.<yourdomain>/ — never imitate a real bank.
+  DEMOBANK:
+    name: Bharat Demo Bank (fictional)
+    category: bank
+    tokens: [bharatdemobank, demobank]
+    domains: [bharatdemobank.example]
+    headers: [{id: BDBANK, verified: true}]

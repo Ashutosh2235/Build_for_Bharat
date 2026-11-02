@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ScamShield SMS</string>
+    <string name="channel_messages">Messages</string>
+    <string name="channel_scam">Scam alerts</string>
+    <string name="channel_reports">Reports</string>
+    <string name="channel_background">Background checks</string>
+    <string name="scanning">Checking message…</string>
+    <string name="reply">Reply</string>
+    <string name="mark_read">Mark as read</string>
+    <string name="consent_server">Check links and senders with ScamShield servers. Only the sender, the links and the kind of warning signs are sent — not your message text.</string>
+    <string name="consent_share_text">Also send the full text of incoming messages for better checks.</string>
+    <string name="disclaimer">Automated checks can be wrong. A warning is not a legal finding.</string>
+    <string name="fraud_alert_title">⚠ Surely fraud — %1$s</string>
+    <string name="spam_alert_title">Surely spam — %1$s</string>
+    <string name="fraud_advice">Do not tap links, call back, share OTPs or install apps from this message.</string>
+    <string name="label_fraud">Surely fraud</string>
+    <string name="label_spam">Surely spam</string>
+    <string name="report_mode_title">When a message is surely fraud</string>
+    <string name="report_mode_auto">Report it automatically</string>
+    <string name="report_mode_auto_desc">ScamShield sends the message, the other messages from that same sender, and the analysis to the cyber-crime cell and the organisation being imitated — without asking.</string>
+    <string name="report_mode_manual">Ask me first (manual)</string>
+    <string name="report_mode_manual_desc">You see a Report button on the message and decide each time. Nothing is sent until you confirm.</string>
+    <string name="decision_rule">Labels appear only after ScamShield has checked the sender against its database and checked every link (threat databases, Google Safe Browsing, security DNS, website age, isolated browser). Surely fraud = confirmed by a database or a link check. Surely spam = strong scam/spam signs, not confirmed by any database. Everything else shows no label.</string>
+    <string name="consent_server_needed">Without server checks, ScamShield works as a normal SMS app and shows no labels.</string>
+</resources>

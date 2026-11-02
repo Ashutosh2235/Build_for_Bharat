@@ -1,0 +1,342 @@
+{
+ "brand_claim_patterns": [
+  "\\b(dear (customer|user|sir|madam)|bank|sbi|hdfc|icici|axis|kotak|pnb|bob|canara|union bank|paytm|phonepe|gpay|google pay|bhim|npci|uidai|aadhaa?r|income ?tax|epfo|irctc|india ?post|speed ?post|bluedart|delhivery|dtdc|fedex|dhl|airtel|jio|vodafone|vi customer|bsnl|electricity|bescom|pspcl|msedcl|tata power|adani|customs|police|cbi|rbi|trai|bharat demo bank)\\b",
+  "(बैंक|आयकर|डाक विभाग|बिजली विभाग|पुलिस)"
+ ],
+ "content": {
+  "DIGITAL_ARREST": {
+   "patterns": [
+    "\\b(digital arrest|arrest warrant|fir (has been|is) (filed|registered)|case registered against)\\b",
+    "\\b(cbi|ed|narcotics|ncb|cyber (cell|police)|customs|court)\\b.{0,40}\\b(case|notice|warrant|arrest|summon|seized)",
+    "(गिरफ्तार|वारंट|डिजिटल अरेस्ट)"
+   ],
+   "points": 20,
+   "text": "Threatens police, CBI, customs or court action ('digital arrest')"
+  },
+  "ELECTRICITY_CUTOFF": {
+   "patterns": [
+    "\\b(electricity|power|light|bijli|connection|gas)\\b.{0,40}\\b(disconnect|cut|cut off|band|suspend)",
+    "\\b(bill)\\b.{0,30}\\b(not (been )?updated|unpaid|pending)\\b.{0,40}\\b(tonight|today|9[:.]30|10[:.]30)",
+    "(बिजली).{0,30}(कट|काट|बंद)"
+   ],
+   "points": 15,
+   "text": "Threatens to disconnect electricity, gas or mobile service tonight"
+  },
+  "JOB_LOAN_FEE": {
+   "group": "FINANCIAL_LURE",
+   "patterns": [
+    "\\b(part[- ]?time|work from home|wfh|daily income|earn)\\b.{0,50}\\b(rs\\.?|inr|₹|per day|daily|salary)",
+    "\\b(like|rate|review)\\b.{0,20}\\b(videos?|youtube|hotel|products?)\\b.{0,40}\\b(earn|pay|rs\\.?|₹)",
+    "\\b(loan)\\b.{0,40}\\b(approved|sanctioned|pre-?approved|instant)\\b",
+    "\\b(registration|processing|security|file)\\s+(fee|charge|deposit)"
+   ],
+   "points": 15,
+   "text": "Offers a job, part-time work or loan that needs a fee or deposit"
+  },
+  "KYC_BLOCK_THREAT": {
+   "patterns": [
+    "\\b(kyc|e-?kyc)\\b.{0,40}\\b(update|expire|expired|pending|verify|complete|suspend|block)",
+    "\\b(update|verify|complete|link)\\b.{0,30}\\b(kyc|pan|aadhaa?r)\\b",
+    "\\b(account|a/c|acct|card|wallet|sim|yono|net ?banking)\\b.{0,40}\\b(block|blocked|suspend|suspended|deactivat|freez|frozen|closed|disabled)",
+    "\\b(pan|aadhaa?r)\\b.{0,30}\\b(not linked|link|expire|invalid|update)",
+    "(खाता|अकाउंट).{0,30}(बंद|ब्लॉक|निलंबित)",
+    "(केवाईसी|पैन|आधार).{0,30}(अपडेट|लिंक|सत्यापित)",
+    "\\b(khata|account)\\b.{0,30}\\b(band|block) (ho|kar)"
+   ],
+   "points": 15,
+   "text": "Threatens to block or suspend your account, or asks for KYC / PAN / Aadhaar update"
+  },
+  "OTP_REQUEST": {
+   "negations": [
+    "\\b(do ?n.?t|never|not to|pls do not|please do not)\\s+(share|disclose|tell|give|reveal)\\b[^.!\\n]*",
+    "(किसी के साथ|किसी को).{0,15}(साझा|शेयर).{0,5}न",
+    "(शेयर|साझा)\\s*(ना|न)\\s*(करें|करे)"
+   ],
+   "patterns": [
+    "\\b(share|send|tell|forward|provide|give|reply with)\\b.{0,30}\\b(otp|one ?time ?password|pin|cvv|mpin|upi ?pin|password)\\b",
+    "\\b(otp|pin|cvv)\\b.{0,30}\\b(share|send|tell|forward|batao|bhejo|bataye)",
+    "(ओटीपी|पिन).{0,30}(बताएं|भेजें|शेयर)"
+   ],
+   "points": 20,
+   "text": "Asks you to share an OTP, PIN or password"
+  },
+  "PARCEL_CUSTOMS": {
+   "patterns": [
+    "\\b(parcel|package|shipment|courier|consignment)\\b.{0,50}\\b(held|hold|on hold|pending|failed|returned|undeliver|customs|address)"
+   ],
+   "points": 15,
+   "text": "Claims a parcel is held or needs a fee / address update"
+  },
+  "PRIZE_LOTTERY": {
+   "group": "FINANCIAL_LURE",
+   "patterns": [
+    "\\b(won|winner|winning|congratulations|congrats|lucky draw|lottery|jackpot|kbc|kaun banega)\\b",
+    "\\b(prize|reward|gift)\\b.{0,30}\\b(claim|collect|receive|rs\\.?|inr|₹)",
+    "(बधाई|लॉटरी|इनाम|जीत).{0,40}"
+   ],
+   "points": 15,
+   "text": "Promises a prize, lottery, lucky draw or reward"
+  },
+  "REFUND_CASHBACK": {
+   "group": "FINANCIAL_LURE",
+   "patterns": [
+    "\\b(refund|cashback|cash back|tax return|income tax refund|it refund)\\b.{0,40}\\b(claim|click|approved|credited|pending|link|receive)",
+    "\\b(claim|receive|get|collect)\\b.{0,25}\\b(refund|cashback|cash back)\\b"
+   ],
+   "points": 15,
+   "text": "Promises a refund, cashback or tax return you did not ask for"
+  },
+  "UPI_COLLECT": {
+   "patterns": [
+    "\\b(scan|approve|accept|enter (your )?upi ?pin)\\b.{0,40}\\b(receive|get|credit|refund|prize)",
+    "\\bupi\\b.{0,30}\\b(collect|request)\\b",
+    "\\bqr\\b.{0,30}\\b(receive|credit|refund)"
+   ],
+   "points": 15,
+   "text": "Asks you to scan a QR / approve a UPI request to RECEIVE money (that sends money instead)"
+  },
+  "URGENCY": {
+   "group": "WEAK",
+   "patterns": [
+    "\\b(urgent|urgently|immediately|act now|last (chance|warning|reminder)|final (notice|warning)|within \\d+ ?(hours?|hrs?|minutes?|mins?)|today only|tonight)\\b",
+    "(तुरंत|अंतिम चेतावनी|आज ही)"
+   ],
+   "points": 5,
+   "text": "Uses pressure words (urgent, last chance, within 24 hours)"
+  }
+ },
+ "fraud_evidence": [
+  "FEED_HIT",
+  "SENDER_BLOCKED",
+  "SENDER_REPORTED",
+  "LOOKALIKE_DOMAIN",
+  "IP_OR_PUNYCODE_URL",
+  "DOWNLOAD_LINK",
+  "LOGIN_FORM",
+  "DOWNLOAD_ATTEMPT",
+  "DOMAIN_NEW",
+  "CERT_NEW"
+ ],
+ "points": {
+  "CERT_NEW": 20,
+  "CLASSIFIER_HIGH": 20,
+  "CLASSIFIER_MEDIUM": 10,
+  "DOMAIN_NEW": 25,
+  "DOWNLOAD_ATTEMPT": 40,
+  "DOWNLOAD_LINK": 40,
+  "HEADER_IMPERSONATION": 15,
+  "HEADER_SUFFIX_MISMATCH": 10,
+  "INTL_SENDER": 10,
+  "IN_CONTACTS": -15,
+  "IP_OR_PUNYCODE_URL": 20,
+  "LOGIN_FORM": 40,
+  "LOOKALIKE_DOMAIN": 30,
+  "MESSAGING_LINK": 5,
+  "MOBILE_BRAND_CLAIM": 30,
+  "MOBILE_COMMERCIAL": 15,
+  "NO_HTTPS": 5,
+  "OFFICIAL_DOMAIN": -30,
+  "REDIRECT_CHAIN": 10,
+  "RISKY_TLD": 5,
+  "SENDER_REPORTED": 20,
+  "SHORTENER": 5
+ },
+ "thresholds": {
+  "auto_report": 80,
+  "scam": 60,
+  "suspicious": 30
+ },
+ "url": {
+  "common_tlds": [
+   "com",
+   "in",
+   "net",
+   "org",
+   "co",
+   "info",
+   "io",
+   "me",
+   "app",
+   "xyz",
+   "top",
+   "club",
+   "online",
+   "site",
+   "live",
+   "icu",
+   "buzz",
+   "cfd",
+   "sbs",
+   "rest",
+   "click",
+   "link",
+   "monster",
+   "quest",
+   "shop",
+   "store",
+   "fun",
+   "space",
+   "website",
+   "cyou",
+   "bond",
+   "vip",
+   "win",
+   "loan",
+   "work",
+   "gq",
+   "tk",
+   "ml",
+   "cf",
+   "ga",
+   "ly",
+   "gl",
+   "gd",
+   "ee",
+   "ru",
+   "cn",
+   "us",
+   "uk",
+   "pk",
+   "bd",
+   "lk",
+   "np",
+   "ae",
+   "biz",
+   "pro",
+   "cc",
+   "ws",
+   "tv",
+   "to",
+   "id",
+   "at",
+   "ai"
+  ],
+  "download_extensions": [
+   "apk",
+   "apks",
+   "xapk",
+   "exe",
+   "msi",
+   "bat",
+   "scr",
+   "jar",
+   "zip",
+   "rar",
+   "7z"
+  ],
+  "messaging_hosts": [
+   "wa.me",
+   "api.whatsapp.com",
+   "chat.whatsapp.com",
+   "t.me",
+   "telegram.me"
+  ],
+  "multi_suffixes": [
+   "co.in",
+   "net.in",
+   "org.in",
+   "firm.in",
+   "gen.in",
+   "ind.in",
+   "gov.in",
+   "nic.in",
+   "ac.in",
+   "edu.in",
+   "res.in",
+   "bank.in",
+   "fin.in",
+   "mil.in",
+   "co.uk",
+   "org.uk",
+   "com.au",
+   "com.pk",
+   "com.bd",
+   "com.np",
+   "com.cn",
+   "co.za",
+   "com.br",
+   "co.id",
+   "com.sg",
+   "com.my",
+   "github.io",
+   "web.app",
+   "firebaseapp.com",
+   "pages.dev",
+   "netlify.app",
+   "vercel.app",
+   "herokuapp.com",
+   "blogspot.com",
+   "weebly.com",
+   "wixsite.com",
+   "000webhostapp.com",
+   "glitch.me",
+   "repl.co",
+   "ngrok.io",
+   "ngrok-free.app",
+   "workers.dev",
+   "r2.dev",
+   "square.site"
+  ],
+  "risky_tlds": [
+   "xyz",
+   "top",
+   "club",
+   "online",
+   "site",
+   "live",
+   "icu",
+   "buzz",
+   "cfd",
+   "sbs",
+   "rest",
+   "click",
+   "link",
+   "monster",
+   "quest",
+   "shop",
+   "store",
+   "fun",
+   "space",
+   "website",
+   "cyou",
+   "bond",
+   "vip",
+   "win",
+   "loan",
+   "work",
+   "gq",
+   "tk",
+   "ml",
+   "cf",
+   "ga"
+  ],
+  "shorteners": [
+   "bit.ly",
+   "tinyurl.com",
+   "t.co",
+   "goo.gl",
+   "ow.ly",
+   "is.gd",
+   "buff.ly",
+   "cutt.ly",
+   "rb.gy",
+   "shorturl.at",
+   "tiny.cc",
+   "rebrand.ly",
+   "s.id",
+   "t.ly",
+   "v.gd",
+   "bl.ink",
+   "short.io",
+   "shrtco.de",
+   "2u.pm",
+   "u.to",
+   "clck.ru",
+   "qr.ae",
+   "l.ead.me",
+   "linktr.ee"
+  ]
+ },
+ "version": 4,
+ "weak_signal_cap": 15
+}

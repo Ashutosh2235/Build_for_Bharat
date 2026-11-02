@@ -1,0 +1,88 @@
+# ScamShield on a shared VPS (context file §12). Your existing reverse proxy (host Nginx /
+# Caddy / Traefik) keeps ports 80/443 and forwards api.<domain> → 127.0.0.1:8000.
+#   cd /opt/scamshield/deploy && docker compose pull && docker compose up -d
+name: scamshield
+
+services:
+  api:
+    image: ghcr.io/${GHCR_OWNER:-local}/scamshield-api:${TAG:-latest}
+    env_file: .env
+    environment:
+      SANDBOX_URL: http://sandbox:8100
+      DATABASE_URL: postgresql+asyncpg://scam:${DB_PASSWORD}@postgres:5432/scamshield
+    ports: ["127.0.0.1:8000:8000"]          # only the host proxy can reach it
+    volumes: ["data:/data", "screens:/data/screens:ro"]
+    depends_on:
+      postgres: {condition: service_healthy}
+    networks: [backend, sandbox_ctl, egress]
+    restart: unless-stopped
+    mem_limit: 512m
+
+  feed-sync:
+    image: ghcr.io/${GHCR_OWNER:-local}/scamshield-api:${TAG:-latest}
+    command: ["python", "-m", "app.feeds.scheduler"]
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://scam:${DB_PASSWORD}@postgres:5432/scamshield
+    depends_on:
+      postgres: {condition: service_healthy}
+    networks: [backend, egress]
+    restart: unless-stopped
+    mem_limit: 384m
+
+  sandbox:
+    image: ghcr.io/${GHCR_OWNER:-local}/scamshield-sandbox:${TAG:-latest}
+    read_only: true
+    tmpfs: ["/tmp:size=256m", "/home/pwuser:size=64m"]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 1g
+    cpus: 1.0
+    pids_limit: 256
+    shm_size: 256m
+    environment:
+      SANDBOX_CONCURRENCY: "2"
+    volumes: ["screens:/screens"]
+    networks: [sandbox_ctl, sandbox_net]   # NOT on `backend` → cannot reach Postgres
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: scam
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+      POSTGRES_DB: scamshield
+    volumes: ["pg:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U scam -d scamshield"]
+      interval: 5s
+      retries: 20
+    networks: [backend]
+    restart: unless-stopped
+    mem_limit: 512m
+
+  backup:
+    image: postgres:16-alpine
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        while true; do
+          pg_dump -h postgres -U scam scamshield | gzip > /backups/scamshield-$$(date +%F).sql.gz
+          find /backups -name 'scamshield-*.sql.gz' -mtime +7 -delete
+          sleep 86400
+        done
+    environment:
+      PGPASSWORD: ${DB_PASSWORD}
+    volumes: ["./backups:/backups"]
+    depends_on:
+      postgres: {condition: service_healthy}
+    networks: [backend]
+    restart: unless-stopped
+
+networks:
+  backend: {internal: true}       # postgres ↔ api ↔ feed-sync, no internet
+  sandbox_ctl: {internal: true}   # api → sandbox control channel
+  sandbox_net: {}                 # sandbox internet egress only
+  egress: {}                      # api/feed-sync outbound (feeds, RDAP, SMTP)
+
+volumes: {pg: {}, data: {}, screens: {}}

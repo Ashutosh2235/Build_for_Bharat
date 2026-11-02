@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="channel_messages">संदेश</string>
+    <string name="channel_scam">धोखाधड़ी अलर्ट</string>
+    <string name="channel_reports">रिपोर्ट</string>
+    <string name="channel_background">पृष्ठभूमि जाँच</string>
+    <string name="scanning">संदेश की जाँच हो रही है…</string>
+    <string name="reply">जवाब दें</string>
+    <string name="mark_read">पढ़ा हुआ चिह्नित करें</string>
+    <string name="consent_server">ScamShield सर्वर से लिंक और भेजने वाले की जाँच करें। केवल भेजने वाला, लिंक और चेतावनी के प्रकार भेजे जाते हैं — आपके संदेश का पाठ नहीं।</string>
+    <string name="consent_share_text">बेहतर जाँच के लिए आने वाले संदेशों का पूरा पाठ भी भेजें।</string>
+    <string name="disclaimer">स्वचालित जाँच गलत हो सकती है। चेतावनी कोई कानूनी निर्णय नहीं है।</string>
+    <string name="fraud_alert_title">⚠ निश्चित धोखाधड़ी — %1$s</string>
+    <string name="spam_alert_title">निश्चित स्पैम — %1$s</string>
+    <string name="fraud_advice">इस संदेश के लिंक न खोलें, वापस कॉल न करें, OTP साझा न करें और कोई ऐप इंस्टॉल न करें।</string>
+    <string name="label_fraud">निश्चित धोखाधड़ी</string>
+    <string name="label_spam">निश्चित स्पैम</string>
+    <string name="report_mode_title">जब कोई संदेश निश्चित धोखाधड़ी हो</string>
+    <string name="report_mode_auto">अपने-आप रिपोर्ट करें</string>
+    <string name="report_mode_auto_desc">ScamShield बिना पूछे संदेश, उसी भेजने वाले के अन्य संदेश और विश्लेषण साइबर अपराध सेल और जिस संस्था की नकल की गई है, उसे भेज देगा।</string>
+    <string name="report_mode_manual">पहले मुझसे पूछें (मैन्युअल)</string>
+    <string name="report_mode_manual_desc">संदेश पर एक रिपोर्ट बटन दिखेगा और हर बार आप तय करेंगे। आपकी पुष्टि के बिना कुछ नहीं भेजा जाता।</string>
+    <string name="decision_rule">लेबल तभी दिखते हैं जब ScamShield भेजने वाले को अपने डेटाबेस से और हर लिंक को (खतरा डेटाबेस, Google Safe Browsing, सुरक्षा DNS, वेबसाइट की उम्र, अलग ब्राउज़र) जाँच ले। निश्चित धोखाधड़ी = किसी डेटाबेस या लिंक जाँच से पुष्टि। निश्चित स्पैम = धोखे/स्पैम के मज़बूत संकेत, पर किसी डेटाबेस से पुष्टि नहीं। बाकी पर कोई लेबल नहीं।</string>
+    <string name="consent_server_needed">सर्वर जाँच के बिना ScamShield सामान्य SMS ऐप की तरह काम करता है और कोई लेबल नहीं दिखाता।</string>
+</resources>

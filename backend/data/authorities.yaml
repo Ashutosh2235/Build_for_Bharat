@@ -1,0 +1,50 @@
+# Auto-report routing. Server-only (never shipped in the APK).
+#
+# !!! VERIFY every address before switching REPORT_MODE=live.
+# !!! Source of truth for state nodal officers: https://cybercrime.gov.in (Contact Us / nodal officers).
+# !!! Entries marked `verified: false` are NEVER emailed in live mode; they only appear in the
+# !!! "would be sent to" list.
+
+# In demo mode every email goes to DEMO_RECIPIENTS (env) instead; the intended recipients are
+# listed inside the email body.
+digest:
+  enabled: false            # phase 2: batch per authority every `window_minutes`
+  window_minutes: 60
+dedupe_hours: 24
+max_per_authority_per_day: 20
+
+state_cyber_cells:
+  PB:
+    label: Punjab State Cyber Crime Cell
+    emails:
+      - {address: adgp.statecybercrime@punjabpolice.gov.in, verified: false}
+      - {address: sp.scc@punjabpolice.gov.in, verified: false}
+      - {address: aigcc@punjabpolice.gov.in, verified: false}
+  CH:
+    label: Chandigarh Cyber Crime Cell
+    emails: []               # TODO from the official nodal officer list
+  HR:
+    label: Haryana Cyber Crime
+    emails: []
+  DL:
+    label: Delhi Police Cyber Crime (IFSO)
+    emails: []
+
+# Keyed by brand id from shared/brands.yaml
+brand_fraud_contacts:
+  DEMOBANK:
+    label: Bharat Demo Bank fraud desk (fictional)
+    emails:
+      - {address: demobank-fraud@example.invalid, verified: true}
+  SBI: {label: SBI phishing reporting, emails: []}      # TODO: from sbi.co.in
+  HDFC: {label: HDFC Bank fraud reporting, emails: []}  # TODO: from hdfcbank.com
+  ICICI: {label: ICICI Bank fraud reporting, emails: []}
+
+national_portals:
+  - {id: ncrp, label: "National Cyber Crime Reporting Portal — Report Suspect", url: "https://cybercrime.gov.in"}
+  - {id: chakshu, label: "Sanchar Saathi — Chakshu (Suspected Fraud Communication)", url: "https://sancharsaathi.gov.in/sfc/"}
+  - {id: helpline, label: "Cyber fraud helpline (if money was lost)", url: "tel:1930"}
+
+trai_1909:
+  number: "1909"
+  auto_send_default: false

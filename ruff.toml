@@ -1,0 +1,9 @@
+line-length = 140
+target-version = "py312"
+
+[lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["B008", "E402"]   # FastAPI Depends() defaults; tools insert sys.path before imports
+
+[lint.per-file-ignores]
+"**/tests/*" = ["E501"]

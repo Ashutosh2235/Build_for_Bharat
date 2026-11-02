@@ -1,0 +1,174 @@
+# ScamShield content + URL rules — SINGLE SOURCE OF TRUTH.
+# Read by the backend directly and exported to android/app/src/main/assets/rules.json
+# by tools/export_rules.py. Never duplicate keyword lists in code.
+#
+# Regex rules: matched case-insensitively against the message text.
+# Keep to syntax that behaves the same in Python `re` and Java/Kotlin `Regex`:
+#   no inline flags, no possessive quantifiers, no variable-length look-behind,
+#   no \b next to Devanagari (Java and Python treat Indic word boundaries differently).
+#
+# `group`: categories in the same group are not stacked — the highest one counts.
+
+version: 4
+
+content:
+  KYC_BLOCK_THREAT:
+    points: 15
+    text: "Threatens to block or suspend your account, or asks for KYC / PAN / Aadhaar update"
+    patterns:
+      - '\b(kyc|e-?kyc)\b.{0,40}\b(update|expire|expired|pending|verify|complete|suspend|block)'
+      - '\b(update|verify|complete|link)\b.{0,30}\b(kyc|pan|aadhaa?r)\b'
+      - '\b(account|a/c|acct|card|wallet|sim|yono|net ?banking)\b.{0,40}\b(block|blocked|suspend|suspended|deactivat|freez|frozen|closed|disabled)'
+      - '\b(pan|aadhaa?r)\b.{0,30}\b(not linked|link|expire|invalid|update)'
+      - '(खाता|अकाउंट).{0,30}(बंद|ब्लॉक|निलंबित)'
+      - '(केवाईसी|पैन|आधार).{0,30}(अपडेट|लिंक|सत्यापित)'
+      - '\b(khata|account)\b.{0,30}\b(band|block) (ho|kar)'
+
+  OTP_REQUEST:
+    points: 20
+    text: "Asks you to share an OTP, PIN or password"
+    # Spans removed before matching this category, so genuine bank OTP SMS
+    # ("Do not share it with anyone") don't trigger it.
+    negations:
+      - '\b(do ?n.?t|never|not to|pls do not|please do not)\s+(share|disclose|tell|give|reveal)\b[^.!\n]*'
+      - '(किसी के साथ|किसी को).{0,15}(साझा|शेयर).{0,5}न'
+      - '(शेयर|साझा)\s*(ना|न)\s*(करें|करे)'
+    patterns:
+      - '\b(share|send|tell|forward|provide|give|reply with)\b.{0,30}\b(otp|one ?time ?password|pin|cvv|mpin|upi ?pin|password)\b'
+      - '\b(otp|pin|cvv)\b.{0,30}\b(share|send|tell|forward|batao|bhejo|bataye)'
+      - '(ओटीपी|पिन).{0,30}(बताएं|भेजें|शेयर)'
+
+  PRIZE_LOTTERY:
+    points: 15
+    group: FINANCIAL_LURE
+    text: "Promises a prize, lottery, lucky draw or reward"
+    patterns:
+      - '\b(won|winner|winning|congratulations|congrats|lucky draw|lottery|jackpot|kbc|kaun banega)\b'
+      - '\b(prize|reward|gift)\b.{0,30}\b(claim|collect|receive|rs\.?|inr|₹)'
+      - '(बधाई|लॉटरी|इनाम|जीत).{0,40}'
+
+  REFUND_CASHBACK:
+    points: 15
+    group: FINANCIAL_LURE
+    text: "Promises a refund, cashback or tax return you did not ask for"
+    patterns:
+      - '\b(refund|cashback|cash back|tax return|income tax refund|it refund)\b.{0,40}\b(claim|click|approved|credited|pending|link|receive)'
+      - '\b(claim|receive|get|collect)\b.{0,25}\b(refund|cashback|cash back)\b'
+
+  JOB_LOAN_FEE:
+    points: 15
+    group: FINANCIAL_LURE
+    text: "Offers a job, part-time work or loan that needs a fee or deposit"
+    patterns:
+      - '\b(part[- ]?time|work from home|wfh|daily income|earn)\b.{0,50}\b(rs\.?|inr|₹|per day|daily|salary)'
+      - '\b(like|rate|review)\b.{0,20}\b(videos?|youtube|hotel|products?)\b.{0,40}\b(earn|pay|rs\.?|₹)'
+      - '\b(loan)\b.{0,40}\b(approved|sanctioned|pre-?approved|instant)\b'
+      - '\b(registration|processing|security|file)\s+(fee|charge|deposit)'
+
+  UPI_COLLECT:
+    points: 15
+    text: "Asks you to scan a QR / approve a UPI request to RECEIVE money (that sends money instead)"
+    patterns:
+      - '\b(scan|approve|accept|enter (your )?upi ?pin)\b.{0,40}\b(receive|get|credit|refund|prize)'
+      - '\bupi\b.{0,30}\b(collect|request)\b'
+      - '\bqr\b.{0,30}\b(receive|credit|refund)'
+
+  DIGITAL_ARREST:
+    points: 20
+    text: "Threatens police, CBI, customs or court action ('digital arrest')"
+    patterns:
+      - '\b(digital arrest|arrest warrant|fir (has been|is) (filed|registered)|case registered against)\b'
+      - '\b(cbi|ed|narcotics|ncb|cyber (cell|police)|customs|court)\b.{0,40}\b(case|notice|warrant|arrest|summon|seized)'
+      - '(गिरफ्तार|वारंट|डिजिटल अरेस्ट)'
+
+  ELECTRICITY_CUTOFF:
+    points: 15
+    text: "Threatens to disconnect electricity, gas or mobile service tonight"
+    patterns:
+      - '\b(electricity|power|light|bijli|connection|gas)\b.{0,40}\b(disconnect|cut|cut off|band|suspend)'
+      - '\b(bill)\b.{0,30}\b(not (been )?updated|unpaid|pending)\b.{0,40}\b(tonight|today|9[:.]30|10[:.]30)'
+      - '(बिजली).{0,30}(कट|काट|बंद)'
+
+  PARCEL_CUSTOMS:
+    points: 15
+    text: "Claims a parcel is held or needs a fee / address update"
+    patterns:
+      - '\b(parcel|package|shipment|courier|consignment)\b.{0,50}\b(held|hold|on hold|pending|failed|returned|undeliver|customs|address)'
+
+  URGENCY:
+    points: 5
+    group: WEAK
+    text: "Uses pressure words (urgent, last chance, within 24 hours)"
+    patterns:
+      - '\b(urgent|urgently|immediately|act now|last (chance|warning|reminder)|final (notice|warning)|within \d+ ?(hours?|hrs?|minutes?|mins?)|today only|tonight)\b'
+      - '(तुरंत|अंतिम चेतावनी|आज ही)'
+
+# Text that "claims to be" an organisation (used with a mobile-number sender).
+brand_claim_patterns:
+  - '\b(dear (customer|user|sir|madam)|bank|sbi|hdfc|icici|axis|kotak|pnb|bob|canara|union bank|paytm|phonepe|gpay|google pay|bhim|npci|uidai|aadhaa?r|income ?tax|epfo|irctc|india ?post|speed ?post|bluedart|delhivery|dtdc|fedex|dhl|airtel|jio|vodafone|vi customer|bsnl|electricity|bescom|pspcl|msedcl|tata power|adani|customs|police|cbi|rbi|trai|bharat demo bank)\b'
+  - '(बैंक|आयकर|डाक विभाग|बिजली विभाग|पुलिस)'
+
+url:
+  shorteners: [bit.ly, tinyurl.com, t.co, goo.gl, ow.ly, is.gd, buff.ly, cutt.ly, rb.gy, shorturl.at, tiny.cc, rebrand.ly, s.id, t.ly, v.gd, bl.ink, short.io, shrtco.de, 2u.pm, u.to, clck.ru, qr.ae, l.ead.me, linktr.ee]
+  risky_tlds: [xyz, top, club, online, site, live, icu, buzz, cfd, sbs, rest, click, link, monster, quest, shop, store, fun, space, website, cyou, bond, vip, win, loan, work, gq, tk, ml, cf, ga]
+  # TLDs used for scheme-less URL extraction ("sbi-kyc.in/abc"). Lowercase, no dot.
+  common_tlds: [com, in, net, org, co, info, io, me, app, xyz, top, club, online, site, live, icu, buzz, cfd, sbs, rest, click, link, monster, quest, shop, store, fun, space, website, cyou, bond, vip, win, loan, work, gq, tk, ml, cf, ga, ly, gl, gd, ee, ru, cn, us, uk, pk, bd, lk, np, ae, biz, pro, cc, ws, tv, to, id, at, ai]
+  # Two-part public suffixes: registered domain = 3 labels when the host ends with one of these.
+  # (Simple, identical on server and phone; no Public Suffix List download needed.)
+  multi_suffixes: [co.in, net.in, org.in, firm.in, gen.in, ind.in, gov.in, nic.in, ac.in, edu.in, res.in, bank.in, fin.in, mil.in, co.uk, org.uk, com.au, com.pk, com.bd, com.np, com.cn, co.za, com.br, co.id, com.sg, com.my, github.io, web.app, firebaseapp.com, pages.dev, netlify.app, vercel.app, herokuapp.com, blogspot.com, weebly.com, wixsite.com, 000webhostapp.com, glitch.me, repl.co, ngrok.io, ngrok-free.app, workers.dev, r2.dev, square.site]
+  download_extensions: [apk, apks, xapk, exe, msi, bat, scr, jar, zip, rar, 7z]
+  messaging_hosts: [wa.me, api.whatsapp.com, chat.whatsapp.com, t.me, telegram.me]
+
+points:
+  # Sender
+  MOBILE_BRAND_CLAIM: 30
+  MOBILE_COMMERCIAL: 15      # prize/job/loan/refund offer from a personal number (TRAI requires DLT headers)
+  HEADER_IMPERSONATION: 15
+  HEADER_SUFFIX_MISMATCH: 10
+  INTL_SENDER: 10
+  SENDER_REPORTED: 20
+  IN_CONTACTS: -15
+  # URL (static)
+  LOOKALIKE_DOMAIN: 30
+  IP_OR_PUNYCODE_URL: 20
+  DOWNLOAD_LINK: 40
+  SHORTENER: 5
+  NO_HTTPS: 5
+  RISKY_TLD: 5
+  MESSAGING_LINK: 5
+  OFFICIAL_DOMAIN: -30
+  # URL (deep analysis, server only)
+  DOMAIN_NEW: 25
+  CERT_NEW: 20               # first HTTPS certificate issued < 30 days ago (crt.sh), used when RDAP has no date
+  REDIRECT_CHAIN: 10
+  LOGIN_FORM: 40
+  DOWNLOAD_ATTEMPT: 40
+  # Classifier
+  CLASSIFIER_HIGH: 20
+  CLASSIFIER_MEDIUM: 10
+
+# Caps
+weak_signal_cap: 15          # URGENCY + NO_HTTPS + RISKY_TLD + SHORTENER + MESSAGING_LINK together
+thresholds:
+  suspicious: 30             # score bands (internal; the app never shows a "suspicious" label)
+  scam: 60                   # minimum score for a "surely spam" / "surely fraud" decision
+  auto_report: 80            # legacy (phase 1); every FRAUD decision is now reportable
+
+# ---------------------------------------------------------------------------------------------
+# DECISION (server only, made after the database lookups AND all link checks have finished):
+#   FRAUD  "Surely fraud" = score >= thresholds.scam AND at least one evidence code below
+#   SPAM   "Surely spam"  = score >= thresholds.scam but NO evidence code (strong scam/spam signs
+#                           from sender + wording, not confirmed by any database or link check)
+#   NONE   nothing is shown to the user
+# Evidence = results that come from a database or from checking the links:
+fraud_evidence:
+  - FEED_HIT            # threat feeds, Google Safe Browsing, ThreatFox, Quad9/Cloudflare security DNS
+  - SENDER_BLOCKED      # ScamShield sender database (admin-confirmed)
+  - SENDER_REPORTED     # ScamShield sender database (3+ users received fraud from it)
+  - LOOKALIKE_DOMAIN    # link imitates an official brand domain
+  - IP_OR_PUNYCODE_URL  # link hides its real address
+  - DOWNLOAD_LINK       # link points to an app/file download
+  - LOGIN_FORM          # sandbox: page asks for password/OTP/card
+  - DOWNLOAD_ATTEMPT    # sandbox: page pushes an app/file download
+  - DOMAIN_NEW          # RDAP: domain registered < 30 days ago
+  - CERT_NEW            # crt.sh: first certificate < 30 days ago

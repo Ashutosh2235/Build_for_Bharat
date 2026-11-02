@@ -1,0 +1,90 @@
+# ScamShield server on YOUR PC for the hackathon (no hosting service).
+# Use the launcher instead of calling this directly:
+#   Windows:      powershell -ExecutionPolicy Bypass -File run-local.ps1
+#   macOS/Linux:  ./run-local.sh
+# Everything is reachable only through the Cloudflare Tunnel; nothing listens on your network.
+name: scamshield-local
+
+x-api: &api
+  build: {context: .., dockerfile: backend/Dockerfile}
+  image: scamshield-api:local
+  env_file: local.env
+  restart: unless-stopped
+
+services:
+  api:
+    <<: *api
+    environment:
+      DATABASE_URL: postgresql+asyncpg://scam:${DB_PASSWORD}@postgres:5432/scamshield
+      SANDBOX_URL: http://sandbox:8100
+    ports: ["127.0.0.1:8000:8000"]          # for checks from this PC only
+    volumes: ["data:/data", "screens:/data/screens:ro"]
+    depends_on:
+      postgres: {condition: service_healthy}
+    networks: [backend, sandbox_ctl, egress]
+
+  feed-sync:
+    <<: *api
+    command: ["python", "-m", "app.feeds.scheduler"]
+    environment:
+      DATABASE_URL: postgresql+asyncpg://scam:${DB_PASSWORD}@postgres:5432/scamshield
+    depends_on:
+      postgres: {condition: service_healthy}
+    networks: [backend, egress]
+
+  sandbox:
+    build: {context: .., dockerfile: sandbox/Dockerfile}
+    image: scamshield-sandbox:local
+    read_only: true
+    tmpfs: ["/tmp:size=256m", "/home/pwuser:size=64m"]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 1g
+    pids_limit: 256
+    shm_size: 256m
+    environment: {SANDBOX_CONCURRENCY: "2"}
+    volumes: ["screens:/screens"]
+    networks: [sandbox_ctl, sandbox_net]    # can't reach the database; blocks LAN/private IPs itself
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: scam
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?run the launcher once to create local.env}
+      POSTGRES_DB: scamshield
+    volumes: ["pg:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U scam -d scamshield"]
+      interval: 5s
+      retries: 20
+    networks: [backend]
+    restart: unless-stopped
+
+  # Public HTTPS address — option 1: random https://xxxx.trycloudflare.com (no account; changes on every start)
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    profiles: ["quick"]
+    command: ["tunnel", "--no-autoupdate", "--url", "http://api:8000"]
+    depends_on: [api]
+    networks: [egress]
+    restart: unless-stopped
+
+  # Public HTTPS address — option 2: fixed https://api.<your-domain> (Cloudflare account + TUNNEL_TOKEN in local.env)
+  tunnel-named:
+    image: cloudflare/cloudflared:latest
+    profiles: ["named"]
+    command: ["tunnel", "--no-autoupdate", "run"]
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN:-}
+    depends_on: [api]
+    networks: [egress]
+    restart: unless-stopped
+
+networks:
+  backend: {internal: true}
+  sandbox_ctl: {internal: true}
+  sandbox_net: {}
+  egress: {}
+
+volumes: {pg: {}, data: {}, screens: {}}

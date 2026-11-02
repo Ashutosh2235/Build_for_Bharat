@@ -1,0 +1,9 @@
+# Build the images ON the VPS from source instead of pulling them from GHCR.
+#   docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build
+services:
+  api:
+    build: {context: .., dockerfile: backend/Dockerfile}
+  feed-sync:
+    build: {context: .., dockerfile: backend/Dockerfile}
+  sandbox:
+    build: {context: .., dockerfile: sandbox/Dockerfile}

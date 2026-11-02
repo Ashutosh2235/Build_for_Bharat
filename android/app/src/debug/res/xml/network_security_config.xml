@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- DEBUG BUILDS ONLY: allow plain http so a phone can reach a backend on your laptop
+     (http://192.168.x.x:8000). Release builds use src/main (HTTPS only). -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

@@ -1,0 +1,43 @@
+# Domains that must never be blocklisted at DOMAIN level from feeds, because they host
+# user content (a phishing page there blocks only its exact URL). Official brand domains
+# from shared/brands.yaml are added automatically.
+google.com
+googleusercontent.com
+googleapis.com
+gstatic.com
+youtube.com
+github.com
+githubusercontent.com
+microsoft.com
+live.com
+office.com
+sharepoint.com
+onedrive.com
+dropbox.com
+amazonaws.com
+cloudfront.net
+azurewebsites.net
+blob.core.windows.net
+apple.com
+icloud.com
+facebook.com
+instagram.com
+whatsapp.com
+telegram.org
+t.me
+wa.me
+linkedin.com
+twitter.com
+x.com
+wikipedia.org
+cloudflare.com
+pages.dev
+workers.dev
+vercel.app
+netlify.app
+web.app
+firebaseapp.com
+github.io
+gov.in
+nic.in
+bank.in

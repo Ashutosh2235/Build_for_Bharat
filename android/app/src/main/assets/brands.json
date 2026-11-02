@@ -1,0 +1,305 @@
+{
+ "brands": {
+  "AIRTEL": {
+   "category": "telecom",
+   "domains": [
+    "airtel.in",
+    "airtel.com"
+   ],
+   "headers": [],
+   "name": "Airtel",
+   "tokens": [
+    "airtel"
+   ]
+  },
+  "AXIS": {
+   "category": "bank",
+   "domains": [
+    "axisbank.com",
+    "axisbank.co.in"
+   ],
+   "headers": [
+    {
+     "id": "AXISBK",
+     "verified": false
+    }
+   ],
+   "name": "Axis Bank",
+   "tokens": [
+    "axisbank"
+   ]
+  },
+  "DEMOBANK": {
+   "category": "bank",
+   "domains": [
+    "bharatdemobank.example"
+   ],
+   "headers": [
+    {
+     "id": "BDBANK",
+     "verified": true
+    }
+   ],
+   "name": "Bharat Demo Bank (fictional)",
+   "tokens": [
+    "bharatdemobank",
+    "demobank"
+   ]
+  },
+  "EPFO": {
+   "category": "government",
+   "domains": [
+    "epfindia.gov.in"
+   ],
+   "headers": [],
+   "name": "EPFO",
+   "tokens": [
+    "epfo",
+    "epfindia"
+   ]
+  },
+  "GPAY": {
+   "category": "payments",
+   "domains": [
+    "google.com",
+    "pay.google.com",
+    "g.co"
+   ],
+   "headers": [],
+   "name": "Google Pay",
+   "tokens": [
+    "googlepay",
+    "gpay"
+   ]
+  },
+  "HDFC": {
+   "category": "bank",
+   "domains": [
+    "hdfcbank.com",
+    "hdfc.com",
+    "hdfcbank.net"
+   ],
+   "headers": [
+    {
+     "id": "HDFCBK",
+     "verified": false
+    }
+   ],
+   "name": "HDFC Bank",
+   "tokens": [
+    "hdfc",
+    "hdfcbank"
+   ]
+  },
+  "ICICI": {
+   "category": "bank",
+   "domains": [
+    "icicibank.com",
+    "icici.com",
+    "icicidirect.com"
+   ],
+   "headers": [
+    {
+     "id": "ICICIB",
+     "verified": false
+    },
+    {
+     "id": "ICICIT",
+     "verified": false
+    }
+   ],
+   "name": "ICICI Bank",
+   "tokens": [
+    "icici",
+    "icicibank"
+   ]
+  },
+  "INCOMETAX": {
+   "category": "government",
+   "domains": [
+    "incometax.gov.in",
+    "incometaxindia.gov.in"
+   ],
+   "headers": [],
+   "name": "Income Tax Department",
+   "tokens": [
+    "incometax",
+    "itrefund",
+    "efiling"
+   ]
+  },
+  "INDIAPOST": {
+   "category": "courier",
+   "domains": [
+    "indiapost.gov.in",
+    "ippbonline.com"
+   ],
+   "headers": [],
+   "name": "India Post",
+   "tokens": [
+    "indiapost",
+    "speedpost"
+   ]
+  },
+  "IRCTC": {
+   "category": "travel",
+   "domains": [
+    "irctc.co.in"
+   ],
+   "headers": [],
+   "name": "IRCTC",
+   "tokens": [
+    "irctc"
+   ]
+  },
+  "JIO": {
+   "category": "telecom",
+   "domains": [
+    "jio.com"
+   ],
+   "headers": [],
+   "name": "Jio",
+   "tokens": [
+    "jiocare",
+    "myjio"
+   ]
+  },
+  "KOTAK": {
+   "category": "bank",
+   "domains": [
+    "kotak.com",
+    "kotakbank.com"
+   ],
+   "headers": [
+    {
+     "id": "KOTAKB",
+     "verified": false
+    }
+   ],
+   "name": "Kotak Mahindra Bank",
+   "tokens": [
+    "kotak",
+    "kotakbank"
+   ]
+  },
+  "NPCI": {
+   "category": "payments",
+   "domains": [
+    "npci.org.in",
+    "bhimupi.org.in"
+   ],
+   "headers": [],
+   "name": "NPCI / BHIM UPI",
+   "tokens": [
+    "npci",
+    "bhimupi"
+   ]
+  },
+  "PAYTM": {
+   "category": "payments",
+   "domains": [
+    "paytm.com",
+    "paytmbank.com",
+    "paytm.me"
+   ],
+   "headers": [
+    {
+     "id": "PAYTMB",
+     "verified": false
+    },
+    {
+     "id": "iPaytm",
+     "verified": false
+    }
+   ],
+   "name": "Paytm",
+   "tokens": [
+    "paytm"
+   ]
+  },
+  "PHONEPE": {
+   "category": "payments",
+   "domains": [
+    "phonepe.com"
+   ],
+   "headers": [],
+   "name": "PhonePe",
+   "tokens": [
+    "phonepe"
+   ]
+  },
+  "PNB": {
+   "category": "bank",
+   "domains": [
+    "pnbindia.in",
+    "netpnb.com"
+   ],
+   "headers": [
+    {
+     "id": "PNBSMS",
+     "verified": false
+    }
+   ],
+   "name": "Punjab National Bank",
+   "tokens": [
+    "pnbindia",
+    "pnbbank"
+   ]
+  },
+  "SBI": {
+   "category": "bank",
+   "domains": [
+    "sbi.co.in",
+    "onlinesbi.sbi",
+    "sbi",
+    "sbicard.com",
+    "sbiyono.sbi"
+   ],
+   "headers": [
+    {
+     "id": "SBIINB",
+     "verified": false
+    },
+    {
+     "id": "SBIBNK",
+     "verified": false
+    },
+    {
+     "id": "SBYONO",
+     "verified": false
+    }
+   ],
+   "name": "State Bank of India",
+   "tokens": [
+    "sbi",
+    "onlinesbi",
+    "yono"
+   ]
+  },
+  "UIDAI": {
+   "category": "government",
+   "domains": [
+    "uidai.gov.in",
+    "myaadhaar.uidai.gov.in"
+   ],
+   "headers": [
+    {
+     "id": "UIDAI",
+     "verified": false
+    }
+   ],
+   "name": "UIDAI (Aadhaar)",
+   "tokens": [
+    "uidai",
+    "aadhaar",
+    "aadhar"
+   ]
+  }
+ },
+ "trusted_suffixes": [
+  "bank.in",
+  "gov.in",
+  "nic.in"
+ ],
+ "version": 2
+}
